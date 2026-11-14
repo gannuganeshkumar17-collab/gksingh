@@ -1,0 +1,8 @@
+{
+  "name": "RoyalClub Arena",
+  "description": "Multi-game virtual arcade featuring Aviator (5 variants), Teen Patti (5 variants), Ludo (3 modes), Cock Fight (2 modes), In-Out (Andar Bahar), and 5 more live table games with OTP login, Google Auth, and unified deposit/withdrawal wallet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated player profile and virtual gaming wallet balance",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "phoneVerified": {
+          "type": "boolean"
+        },
+        "balance": {
+          "type": "number"
+        },
+        "totalDeposited": {
+          "type": "number"
+        },
+        "totalWithdrawn": {
+          "type": "number"
+        },
+        "gamesPlayed": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "balance",
+        "totalDeposited",
+        "totalWithdrawn",
+        "gamesPlayed",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WalletTransaction": {
+      "title": "WalletTransaction",
+      "description": "Immutable deposit, withdrawal, bet, or win record inside a user's wallet ledger",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["deposit", "withdraw", "bet", "win", "bonus"],
+          "maxLength": 20
+        },
+        "amount": {
+          "type": "number"
+        },
+        "method": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "gameName": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "status": {
+          "type": "string",
+          "enum": ["completed", "pending", "failed"],
+          "maxLength": 20
+        },
+        "balanceAfter": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "type",
+        "amount",
+        "method",
+        "reference",
+        "status",
+        "balanceAfter",
+        "createdAt"
+      ]
+    },
+    "GameRound": {
+      "title": "GameRound",
+      "description": "Recorded outcome of a single game round played by the user",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "gameId": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "variant": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "betAmount": {
+          "type": "number"
+        },
+        "payout": {
+          "type": "number"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["win", "loss", "draw"],
+          "maxLength": 16
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "gameId",
+        "variant",
+        "betAmount",
+        "payout",
+        "outcome",
+        "summary",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Private user profile and virtual wallet document owned exclusively by userId"
+    },
+    "/users/{userId}/transactions/{txId}": {
+      "schema": {
+        "$ref": "#/entities/WalletTransaction"
+      },
+      "description": "User wallet transaction ledger (deposits, withdrawals, game bets and payouts)"
+    },
+    "/users/{userId}/gameRounds/{roundId}": {
+      "schema": {
+        "$ref": "#/entities/GameRound"
+      },
+      "description": "User game round history records"
+    }
+  }
+}
